@@ -4,9 +4,6 @@ set -e
 if [ "$1" = 'postgres' ]; then
     chown -R postgres "$PGDATA"
 
-    chmod g+s /run/postgresql
-    chown -R postgres:postgres /run/postgresql
-
     if [ -z "$(ls -A "$PGDATA")" ]; then
         gosu postgres initdb
 
@@ -67,6 +64,7 @@ if [ "$1" = 'postgres' ]; then
         fi
     fi
 
+    . /reload-workers.sh
     exec gosu postgres "$@"
 fi
 

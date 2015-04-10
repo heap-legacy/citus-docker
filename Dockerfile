@@ -34,6 +34,7 @@ ENV PGDATA /data
 VOLUME /data
 
 COPY docker-entrypoint.sh /
+COPY reload-workers.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
