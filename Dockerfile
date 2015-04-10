@@ -2,6 +2,7 @@
 FROM debian:wheezy
 MAINTAINER Heap Analytics https://heapanalytics.com
 
+
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r postgres && useradd -r -g postgres postgres
 
@@ -21,14 +22,15 @@ ENV LANG en_US.utf8
 
 RUN mkdir /docker-entrypoint-initdb.d
 
-ENV PG_MAJOR 9.4
-ENV CITUS_MAJOR 4.0
-
 # Install citusdb 4.0
 RUN curl -o /tmp/citus.deb -SL https://packages.citusdata.com/readline-6.0/citusdb-4.0.0-1.amd64.deb && \
     dpkg --install /tmp/citus.deb && \
     rm /tmp/citus.deb
 
+ENV PG_MAJOR 9.4
+ENV CITUS_MAJOR 4.0
+
+ENV PGUSER postgres
 ENV PATH /opt/citusdb/$CITUS_MAJOR/bin:$PATH
 ENV PGDATA /data
 VOLUME /data
