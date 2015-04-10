@@ -1,0 +1,16 @@
+citusmaster:
+    build: .
+    environment:
+        CITUS_MASTER: true
+    ports: ["5432:5432"]
+    links:
+        - citus
+        - citus2
+
+citus:
+    build: .
+    ports: ["5001:5432"]
+
+citus2:
+    build: .
+    ports: ["5002:5432"]
