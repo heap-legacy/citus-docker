@@ -11,6 +11,7 @@ In addition, new environment variables have been added:
 `CITUS_MASTER` denotes that this instance is the citus master node. All citus workers
 should be linked to this container (and should contain `citus` in their name).
 
+`CITUS_STANDALONE` marks a citus master as a worker as well.
 
 ### Testing the image
 

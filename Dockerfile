@@ -2,13 +2,14 @@
 FROM debian:wheezy
 MAINTAINER Heap Analytics https://heapanalytics.com
 
-
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 RUN groupadd -r postgres && useradd -r -g postgres postgres
 
 # grab gosu for easy step-down from root
 RUN gpg --keyserver pool.sks-keyservers.net --recv-keys B42F6819007F00F88E364FD4036A9C25BF357DD4
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* \
+RUN apt-get update \
+    && apt-get install -y curl \
+    && rm -rf /var/lib/apt/lists/* \
     && curl -o /usr/local/bin/gosu -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture)" \
     && curl -o /usr/local/bin/gosu.asc -SL "https://github.com/tianon/gosu/releases/download/1.2/gosu-$(dpkg --print-architecture).asc" \
     && gpg --verify /usr/local/bin/gosu.asc \
@@ -24,8 +25,10 @@ RUN mkdir /docker-entrypoint-initdb.d
 
 # Install citusdb 4.0
 RUN curl -o /tmp/citus.deb -SL https://packages.citusdata.com/readline-6.0/citusdb-4.0.0-1.amd64.deb && \
+    curl -o /tmp/citus-contrib.deb -SL https://packages.citusdata.com/contrib/citusdb-contrib-4.0.0-1.amd64.deb && \
     dpkg --install /tmp/citus.deb && \
-    rm /tmp/citus.deb
+    dpkg --install /tmp/citus-contrib.deb && \
+    rm /tmp/citus*.deb
 
 ENV PG_MAJOR 9.4
 ENV CITUS_MAJOR 4.0

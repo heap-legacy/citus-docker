@@ -64,7 +64,10 @@ if [ "$1" = 'postgres' ]; then
         fi
     fi
 
-    . /reload-workers.sh
+    if [ "$CITUS_MASTER" ]; then
+        echo "Loading linked citus workers"
+        . /reload-workers.sh
+    fi
     exec gosu postgres "$@"
 fi
 
