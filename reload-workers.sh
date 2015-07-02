@@ -11,7 +11,7 @@ cat /etc/hosts | \
     # grouped together. This makes the hostnames in worker list predictable.
     sort | \
     uniq | \
-    xargs -I host echo -e "host\t5432" >> "$PGDATA/pg_worker_list.conf"
+    xargs -I host echo -e "host\t5432" > "$PGDATA/pg_worker_list.conf"
 
 if [ "$CITUS_STANDALONE" ]
 then
