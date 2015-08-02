@@ -1,6 +1,6 @@
 # citus-docker
 
-Dockerfile for [CitusDB](citusdata.com), sharded scalable postgresql database.
+Dockerfile for [CitusDB](https://www.citusdata.com), sharded scalable postgresql database.
 
 ## How to use this image
 
