@@ -9,7 +9,7 @@ function longestMatchingHost ()
     # Remove ip and junk info attached by docker
     cut -f2 | cut -f1 -d' ' | \
     # Take the longest match for this IP (e.g. projectname_citus_1)
-    sort -n | \
+    awk '{print $0" "length($0)}' | sort -k2,2rn | cut -f1 -d' ' | \
     head -n 1 | \
     xargs -I host echo -e "host\t5432"
 }
