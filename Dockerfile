@@ -23,9 +23,9 @@ ENV LANG en_US.utf8
 
 RUN mkdir /docker-entrypoint-initdb.d
 
-# Install citusdb 4.0
-RUN curl -o /tmp/citus.deb -SL https://packages.citusdata.com/readline-6.0/citusdb-4.0.0-1.amd64.deb && \
-    curl -o /tmp/citus-contrib.deb -SL https://packages.citusdata.com/contrib/citusdb-contrib-4.0.0-1.amd64.deb && \
+# Install CitusDB 4.1
+RUN curl -o /tmp/citus.deb -SL https://packages.citusdata.com/readline-6.0/citusdb-4.0.1-1.amd64.deb && \
+    curl -o /tmp/citus-contrib.deb -SL https://packages.citusdata.com/contrib/citusdb-contrib-4.0.1-1.amd64.deb && \
     dpkg --install /tmp/citus.deb && \
     dpkg --install /tmp/citus-contrib.deb && \
     rm /tmp/citus*.deb
