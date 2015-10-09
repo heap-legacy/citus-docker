@@ -6,6 +6,7 @@ function longestMatchingHost ()
   ip=$1
   cat /etc/hosts | \
     grep "$ip" | \
+    grep -v "\.bridge" | \
     # Remove ip and junk info attached by docker
     cut -f2 | cut -f1 -d' ' | \
     # Take the longest match for this IP (e.g. projectname_citus_1)
