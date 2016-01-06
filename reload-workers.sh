@@ -15,11 +15,11 @@ cat /etc/hosts | \
 cat /etc/hosts | \
     grep "citus" | \
     # Find all lines for links which don't have aliases
-    egrep "^[0-9.]+\s+\w+\s+\w+\s+\w+$" | \
+    egrep "^[0-9.]+\s+\w+\s+\w+$" | \
     # take all container names
     cut -f2 | cut -f1 -d' ' >> /tmp/worker_names_tmp
 
-cat /tmp/worker_names_tmp | uniq | sort > "$PGDATA/pg_worker_list.conf"
+cat /tmp/worker_names_tmp | sort | uniq > "$PGDATA/pg_worker_list.conf"
 rm /tmp/worker_names_tmp
 
 
