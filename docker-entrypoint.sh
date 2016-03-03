@@ -1,11 +1,19 @@
 #!/bin/bash
 set -e
 
+# constants
+workerlist=pg_worker_list.conf
+citusconfdir=/etc/citus
+externalworkerlist="$citusconfdir/$workerlist"
+
 if [ "$1" = 'postgres' ]; then
     chown -R postgres "$PGDATA"
 
     if [ -z "$(ls -A "$PGDATA")" ]; then
         gosu postgres initdb
+        touch "$externalworkerlist"
+        chown postgres:postgres "$externalworkerlist"
+        gosu postgres ln -sf "$externalworkerlist" "$PGDATA/$workerlist"
 
         sed -ri "s/^#(listen_addresses\s*=\s*)\S+/\1'*'/" "$PGDATA"/postgresql.conf
 
@@ -64,10 +72,6 @@ if [ "$1" = 'postgres' ]; then
         fi
     fi
 
-    if [ "$CITUS_MASTER" ]; then
-        echo "Loading linked citus workers"
-        . /reload-workers.sh
-    fi
     exec gosu postgres "$@"
 fi
 
