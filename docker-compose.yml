@@ -1,16 +1,16 @@
-citusmaster:
-    build: .
-    environment:
-        CITUS_MASTER: true
-    ports: ["5432:5432"]
-    links:
-        - citus
-        - citus2
+version: '2'
 
-citus:
+services:
+  master:
+    container_name: 'citus_master'
     build: .
-    ports: ["5001:5432"]
-
-citus2:
+    ports: ['5432:5432']
+    labels: ['com.citusdata.role=Master']
+  worker:
     build: .
-    ports: ["5002:5432"]
+    labels: ['com.citusdata.role=Worker']
+  config:
+    container_name: 'citus_config'
+    image: 'citusdata/workerlist-gen:0.9.0'
+    volumes: ['/var/run/docker.sock:/tmp/docker.sock']
+    volumes_from: ['master']

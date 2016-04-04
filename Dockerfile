@@ -37,9 +37,9 @@ ENV PGUSER postgres
 ENV PATH /opt/citusdb/$CITUS_MAJOR/bin:$PATH
 ENV PGDATA /data
 VOLUME /data
+VOLUME /etc/citus
 
 COPY docker-entrypoint.sh /
-COPY reload-workers.sh /
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
 

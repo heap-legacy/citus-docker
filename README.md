@@ -4,34 +4,27 @@ Dockerfile for [CitusDB](https://www.citusdata.com), sharded scalable postgresql
 
 ## How to use this image
 
-The image is based off of the [official postgres image](https://registry.hub.docker.com/_/postgres/) and supports the same options.
-
-In addition, new environment variables have been added:
-
-`CITUS_MASTER` denotes that this instance is the citus master node. All citus workers
-should be linked to this container (and should contain `citus` in their name).
-
-`CITUS_STANDALONE` marks a citus master as a worker as well.
+The image is based off of the [official postgres image](https://registry.hub.docker.com/_/postgres/) and supports the same options. When used with the provided `docker-compose` configuration, a [`workerlist-gen` container](https://hub.docker.com/r/citusdata/workerlist-gen/) is responsible for updating the worker list file and signalling the master node to reload changes.
 
 ### Testing the image
 
 The image defined in this repo can be tested using [docker compose](https://docs.docker.com/compose/).
 
-To launch a citus cluster with a master node and 2 workers:
+To launch a minimal Citus cluster (one master and one worker): `docker-compose -p citus up`. The `-p` flag specifies a custom project name (defaults to current working directory's name, which is often unsightly).
 
-* `docker-compose up`
+To bring the worker count up to three: `docker-compose -p citus scale worker=3`
 
 For an example for setting up a distributed table and on how to run queries on it,
-see [CitusData docs: Examples with Sample Data](https://www.citusdata.com/docs/examples#amazon-reviews).
+see [Querying Raw Data — CitusDB Documentation](https://www.citusdata.com/documentation/citusdb-documentation/examples/time_querying_raw_data.html).
 
-These commands should be run from inside your docker instance:
+These commands should be run from inside your Docker instance:
 
 ```bash
-> docker exec -it citusdocker_citusmaster_1 bash
-root@9f7103615071:/# apt-get update; apt-get install -y wget
-root@9f7103615071:/# wget http://examples.citusdata.com/customer_reviews_1998.csv.gz
-root@9f7103615071:/# wget http://examples.citusdata.com/customer_reviews_1999.csv.gz
-root@9f7103615071:/# gzip -d *.csv.gz
-root@9f7103615071:/# psql
-# follow the rest of the guide from here
+docker exec -it citus_master bash
+apt-get update; apt-get install -y wget
+wget http://examples.citusdata.com/github_archive/github_events-2015-01-01-{0..5}.csv.gz
+gzip -d github_events-2015-01-01-*.gz
+psql
+
+# See the CitusDB guide (linked above) for remaining steps
 ```
